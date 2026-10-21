@@ -1,0 +1,20 @@
+{
+  "dataset": "ISCX NSL-KDD (2009)",
+  "retrieved": "2026-10-21",
+  "official_description": "https://www.unb.ca/cic/datasets/nsl.html",
+  "mirror": "https://github.com/defcom17/NSL_KDD",
+  "files": {
+    "KDDTrain+.txt": {
+      "url": "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTrain%2B.txt",
+      "sha256": "1b86d2f957b33082081bba410fe129b475efebcc13c9014c3f447c8271aadf95",
+      "records": 125973,
+      "bytes": 19109424
+    },
+    "KDDTest+.txt": {
+      "url": "https://raw.githubusercontent.com/defcom17/NSL_KDD/master/KDDTest%2B.txt",
+      "sha256": "fa46b0935342616aa83b7c2578db355b6a7aaabbc492248172c7a1e8b7ab8f84",
+      "records": 22544,
+      "bytes": 3441513
+    }
+  }
+}

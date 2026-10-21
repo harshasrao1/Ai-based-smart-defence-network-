@@ -1,0 +1,7 @@
+backend/.venv/
+__pycache__/
+.pytest_cache/
+backend/data/*.sqlite3*
+backend/data/*.key
+backend/models/*/
+backend/models/CURRENT

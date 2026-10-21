@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Smart Defence · Network Protection</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <link rel="apple-touch-icon" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+<section id="auth-screen" class="auth-screen">
+  <div class="auth-story"><span class="eyebrow">NETWORK SECURITY / ACADEMIC WORKSPACE</span><div class="brand-mark">SD<span>+</span></div><h1>Visibility.<br>Intelligence.<br><span>Defence.</span></h1><p>Understand your traffic, investigate alerts, and test detection from one secure local workspace.</p><div class="story-tags"><span>Random Forest</span><span>Live rules</span><span>Safe simulation</span></div></div>
+  <div class="auth-panel"><div class="auth-card"><span class="eyebrow">SMART DEFENCE</span><h2 id="auth-title">Loading workspace…</h2><p id="auth-description" class="muted"></p><form id="auth-form"><label>Username<input id="username" name="username" autocomplete="username" maxlength="32" required></label><label>Password<input id="password" name="password" type="password" autocomplete="current-password" maxlength="256" required></label><label id="confirm-label" hidden>Confirm password<input id="confirm-password" name="confirm_password" type="password" autocomplete="new-password" maxlength="256"></label><button id="auth-submit" type="submit" class="primary">Continue</button></form><p id="auth-message" role="status"></p><small>Local administrator access · No default password</small></div></div>
+</section>
+<div id="app-shell" class="shell" hidden>
+  <aside><div class="brand"><div class="mini-mark">SD</div><div><strong>SMART DEFENCE</strong><small>NETWORK PROTECTION</small></div></div><div class="nav-label">WORKSPACE</div><nav id="navigation" aria-label="Main navigation"></nav><div class="sidebar-bottom"><div class="online-dot">Local academic workspace</div><small id="signed-user"></small><button id="logout" class="secondary">Log out</button></div></aside>
+  <div class="workspace"><header><div class="breadcrumb">SMART DEFENCE <span>/</span> <span id="page-crumb">OVERVIEW</span></div><div class="header-search"><span class="search-logo-icon" aria-hidden="true"></span><input id="global-search" type="search" placeholder="Search events, alerts, rules..." autocomplete="off"></div><div id="clock" class="muted"></div></header><main><div class="page-heading"><div><span class="eyebrow">INTELLIGENT NETWORK SECURITY</span><h1 id="page-title">Overview</h1><p id="page-subtitle" class="muted"></p></div><div class="workspace-badge">LOCAL WORKSPACE</div></div><div id="content" aria-live="polite"></div></main><footer>Academic prototype · Advisory alerts · No automatic traffic blocking</footer></div>
+</div>
+<div id="toast" class="toast" hidden role="status"></div>
+</body></html>
