@@ -26,7 +26,8 @@ async function api(path,options={}) {
   const headers={...(options.headers||{})};
   if(options.method && options.method!=='GET') headers['X-CSRF-Token']=csrf;
   if(options.body && !(options.body instanceof FormData)) headers['Content-Type']='application/json';
-  const response=await fetch('/api'+path,{credentials:'same-origin',...options,headers});
+  const base = (window.API_BASE_URL || '/api').replace(/\/$/, '');
+  const response=await fetch(base+path,{credentials:window.API_BASE_URL?'include':'same-origin',...options,headers});
   const result=await response.json();
   if(response.status===401){ await showAuth(); throw new Error(result.error||'Please sign in again.'); }
   if(!response.ok) throw new Error(result.error||'Request failed.');

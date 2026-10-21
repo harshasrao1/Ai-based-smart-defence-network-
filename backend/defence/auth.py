@@ -20,7 +20,15 @@ class AuthError(ValueError):
 
 def _connect(path=None):
     target = Path(path or os.environ.get('SMART_DEFENCE_AUTH_DB') or DEFAULT_AUTH_DB)
-    target.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        # Test writability of directory
+        test_file = target.parent / '.test_auth_write'
+        test_file.touch()
+        test_file.unlink()
+    except (OSError, PermissionError):
+        target = Path('/tmp') / 'auth.sqlite3'
+        target.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(target, timeout=20)
     db.row_factory = sqlite3.Row
     db.execute('''CREATE TABLE IF NOT EXISTS admin (

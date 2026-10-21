@@ -73,10 +73,17 @@ def train(train_path, test_path, output_dir=DEFAULT_MODELS, trees=150, progress=
     bundle = {'binary': binary, 'category': category, 'metadata': metadata}
     metadata['workflow_category'] = evaluate(test_category, predict(bundle, test_df).category, CLASSES)
     destination = Path(output_dir)
-    destination.mkdir(parents=True, exist_ok=True)
+    try:
+        destination.mkdir(parents=True, exist_ok=True)
+        test_file = destination / '.test_model_write'
+        test_file.touch()
+        test_file.unlink()
+    except (OSError, PermissionError):
+        destination = Path('/tmp/models')
+        destination.mkdir(parents=True, exist_ok=True)
     # Publish complete files in a unique generation; pointer replacement is atomic.
     generation = destination / metadata['model_id']
-    generation.mkdir()
+    generation.mkdir(exist_ok=True)
     joblib.dump(bundle, generation / 'model.joblib')
     # Reopen before publishing the generation; verify serialization completed.
     reloaded = joblib.load(generation / 'model.joblib')
@@ -96,7 +103,12 @@ def load_bundle(model_dir=DEFAULT_MODELS):
     directory = Path(model_dir)
     pointer = directory / 'CURRENT'
     if not pointer.exists():
-        raise ValidationError('No trained model. Open Model Training or run python -m scripts.train.')
+        tmp_pointer = Path('/tmp/models/CURRENT')
+        if tmp_pointer.exists():
+            directory = Path('/tmp/models')
+            pointer = tmp_pointer
+        else:
+            raise ValidationError('No trained model. Open Model Training or run python -m scripts.train.')
     identifier = pointer.read_text().strip()
     try:
         uuid.UUID(identifier)

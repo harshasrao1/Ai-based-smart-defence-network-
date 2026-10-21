@@ -11,9 +11,18 @@ DEFAULT_DB = Path(__file__).resolve().parents[1] / 'data' / 'history.sqlite3'
 
 def connect(path=DEFAULT_DB):
     if path == DEFAULT_DB and os.environ.get('SMART_DEFENCE_DB'):
-        path = Path(os.environ['SMART_DEFENCE_DB'])
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
-    db = sqlite3.connect(path, timeout=20)
+        target = Path(os.environ['SMART_DEFENCE_DB'])
+    else:
+        target = Path(path)
+    try:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        test_file = target.parent / '.test_storage_write'
+        test_file.touch()
+        test_file.unlink()
+    except (OSError, PermissionError):
+        target = Path('/tmp') / 'history.sqlite3'
+        target.parent.mkdir(parents=True, exist_ok=True)
+    db = sqlite3.connect(target, timeout=20)
     db.execute('PRAGMA journal_mode=WAL')
     db.execute('''CREATE TABLE IF NOT EXISTS predictions (
         id INTEGER PRIMARY KEY, batch_id TEXT NOT NULL, row_number INTEGER NOT NULL,

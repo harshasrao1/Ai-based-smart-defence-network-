@@ -34,20 +34,32 @@ def create_app(test_config=None):
     else:
         key = os.environ.get('SMART_DEFENCE_SECRET')
         if not key:
-            secret_file = ROOT/'data'/'flask_secret.key'
-            secret_file.parent.mkdir(exist_ok=True)
             try:
-                descriptor = os.open(secret_file, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
-                with os.fdopen(descriptor, 'w') as stream:
-                    stream.write(secrets.token_hex(32))
-            except FileExistsError:
-                pass
-            key = secret_file.read_text().strip()
-            if len(key) < 32:
-                raise RuntimeError('Invalid local session key. Restore it or set SMART_DEFENCE_SECRET.')
+                secret_file = ROOT/'data'/'flask_secret.key'
+                secret_file.parent.mkdir(exist_ok=True)
+                try:
+                    descriptor = os.open(secret_file, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+                    with os.fdopen(descriptor, 'w') as stream:
+                        stream.write(secrets.token_hex(32))
+                except FileExistsError:
+                    pass
+                key = secret_file.read_text().strip()
+            except (OSError, PermissionError):
+                tmp_secret = Path('/tmp') / 'flask_secret.key'
+                try:
+                    if tmp_secret.exists():
+                        key = tmp_secret.read_text().strip()
+                    else:
+                        key = secrets.token_hex(32)
+                        tmp_secret.write_text(key)
+                except Exception:
+                    key = secrets.token_hex(32)
+            if not key or len(key) < 32:
+                key = secrets.token_hex(32)
+    is_secure = bool(os.environ.get('VERCEL') or os.environ.get('HTTPS'))
     app.config.update(SECRET_KEY=key, MAX_CONTENT_LENGTH=100*1024*1024,
                       SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE='Lax',
-                      SESSION_COOKIE_SECURE=False, SESSION_COOKIE_NAME='smart_defence_session')
+                      SESSION_COOKIE_SECURE=is_secure, SESSION_COOKIE_NAME='smart_defence_session')
     if test_config:
         app.config.update(test_config)
     monitor = PacketMonitor(persist=True)
