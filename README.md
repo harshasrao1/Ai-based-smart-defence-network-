@@ -1,4 +1,4 @@
-# Smart Defence Network Protection System — Frontend + Backend
+# AI Based Smart  Network Detection System — Frontend + Backend
 
 This edition separates the web interface from the Python API. It retains the NSL-KDD Random Forest models, login, packet monitoring, Port Scan / High Traffic Rate rules, safe simulations, and searchable SQLite histories.
 
